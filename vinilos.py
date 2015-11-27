@@ -1,24 +1,21 @@
 import sys
 import pymongo
 
-
 con = pymongo.MongoClient("localhost", 27017)
 db = con.vinilos
 col = db.discos
 
 
 def bienvenido():
-    
     texto = """
-              ===============================
-              Catalogador de Discos Vinilos
-              ===============================
-    """
+			  ===============================
+			  Catalogador de Discos Vinilos
+			  ===============================
+	"""
     print(texto.center(50))
 
 
 def seleccionar():
-
     print("")
     print("(1) Menu Inicio (2) Menu busqueda (3) Menu listado (4) Salir : ")
     print("")
@@ -45,7 +42,6 @@ def seleccionar():
 
 
 def iniciar():
-
     print("")
     print("Selecciona una opcion:")
     print("")
@@ -58,7 +54,7 @@ def iniciar():
     print("4 - Salir")
     print("")
 
-    opcion = input("> ")   
+    opcion = input("> ")
 
     if opcion == "1":
         print("")
@@ -83,7 +79,6 @@ def iniciar():
 
 
 def registrar():
-    
     print("")
     grupo = input("Introduzca el grupo/artista: ")
     grupo = grupo.title()
@@ -101,7 +96,8 @@ def registrar():
     print("")
 
     try:
-        col.insert({'Grupo/Artista':(grupo),'album':(album),'Año':(year),'Genero':(genero),'Discografica':(discografica),'Comentarios':(obs)})
+        col.insert({'Grupo/Artista': (grupo), 'album': (album), 'Año': (year), 'Genero': (genero),
+                    'Discografica': (discografica), 'Comentarios': (obs)})
 
         print("Datos Guardado con exito!")
         print("")
@@ -110,23 +106,22 @@ def registrar():
 
         redata = input("¿Deseas registrar otro vinilo? s/n: ")
         print("")
-        
+
         if redata.lower() == ("s"):
             registrar()
         seleccionar()
 
     except:
-        print ("'No ha sido posible conectar con la base de datos'")
+        print("'No ha sido posible conectar con la base de datos'")
         sys.exit()
 
     finally:
         print("")
         print("Fin del programa")
-        print("")    
-        
+        print("")
+
 
 def buscar():
-
     print("")
     print("Selecciona una opcion:")
     print("")
@@ -138,18 +133,18 @@ def buscar():
     print("")
     print("4 - Menu Inicio")
     print("")
-    
-    
-    opcionBusqueda = input("> ")
-    
-    if opcionBusqueda == "1":
+
+    opcion_busqueda = input("> ")
+
+    if opcion_busqueda == "1":
         print("")
         print("digite el nombre del grupo/artista")
         print("")
         busca_nombre = input("> ")
-        busca_nombre = {'Grupo/Artista':{"$regex" : (busca_nombre), "$options":"i"}}
-           
-        for search in col.find(busca_nombre, projection={"_id": False}).sort([('Grupo/Artista', pymongo.ASCENDING), ('Año', pymongo.ASCENDING)]): 
+        busca_nombre = {'Grupo/Artista': {"$regex": (busca_nombre), "$options": "i"}}
+
+        for search in col.find(busca_nombre, projection={"_id": False}).sort(
+                [('Grupo/Artista', pymongo.ASCENDING), ('Año', pymongo.ASCENDING)]):
             print(search)
             print("")
         print((col.count(busca_nombre), "Vinilos registrado en la base de datos"))
@@ -159,32 +154,34 @@ def buscar():
         if query_repeat.lower() == ("s"):
             buscar()
 
-    elif opcionBusqueda == "2":
+    elif opcion_busqueda == "2":
         print("")
         print("digite el nombre del Album")
         print("")
         busca_album = input("> ")
-        busca_album = {'album':{"$regex" : (busca_album), "$options":"i"}}
+        busca_album = {'album': {"$regex": (busca_album), "$options": "i"}}
 
-        for search in col.find(busca_album, projection={"_id": False}).sort([('Grupo/Artista', pymongo.ASCENDING), ('Año', pymongo.ASCENDING)]):
+        for search in col.find(busca_album, projection={"_id": False}).sort(
+                [('Grupo/Artista', pymongo.ASCENDING), ('Año', pymongo.ASCENDING)]):
             print(search)
             print("")
         print((col.count(busca_album), "Vinilos registrado en la base de datos"))
         print("")
         query_repeat = input("¿Deseas hacer otra consulta? s/n: ")
         print("")
-        
+
         if query_repeat.lower() == ("s"):
             buscar()
-                
-    elif opcionBusqueda == "3":
+
+    elif opcion_busqueda == "3":
         print("")
         print("digite el año del disco")
         print("")
         busca_año = input("> ")
-        busca_año = {'Año':{"$regex" : (busca_año), "$options":"i"}}
-             
-        for search in col.find(busca_año, projection={"_id": False}).sort([('Año', pymongo.ASCENDING), ('Grupo/Artista', pymongo.ASCENDING)]):
+        busca_año = {'Año': {"$regex": (busca_año), "$options": "i"}}
+
+        for search in col.find(busca_año, projection={"_id": False}).sort(
+                [('Año', pymongo.ASCENDING), ('Grupo/Artista', pymongo.ASCENDING)]):
             print(search)
             print("")
         print((col.count(busca_año), "Vinilos registrado en la base de datos"))
@@ -195,7 +192,7 @@ def buscar():
         if query_repeat.lower() == ("s"):
             buscar()
 
-    elif opcionBusqueda == "4":
+    elif opcion_busqueda == "4":
         iniciar()
 
 
@@ -203,10 +200,9 @@ def buscar():
         print("la opcion que has seleccionado no es valida")
         buscar()
     seleccionar()
-                     
+
 
 def listar():
-
     print("")
     print("Selecciona una opcion:")
     print("")
@@ -220,40 +216,41 @@ def listar():
     print("")
     print("5 - Menu Inicio")
     print("")
-    
+
     opcion_avan = input("> ")
 
     if opcion_avan == "1":
-        for listado in col.find(projection={"_id": False}).sort('Grupo/Artista',pymongo.ASCENDING):
-        	print(listado)
-        	print("")
+        for listado in col.find(projection={"_id": False}).sort('Grupo/Artista', pymongo.ASCENDING):
+            print(listado)
+            print("")
 
 
     elif opcion_avan == "2":
-        for listado in col.aggregate([{"$group":{"_id":{"Grupo":"$Grupo/Artista"},"Discos": {"$sum":1}}},
-                                {"$project":{"Grupo":1, "Discos": 1}},
-                                {"$sort":{"Grupo":1, "Discos":1}}]):
+        for listado in col.aggregate([{"$group": {"_id": {"Grupo": "$Grupo/Artista"}, "Discos": {"$sum": 1}}},
+                                      {"$project": {"Grupo": 1, "Discos": 1}},
+                                      {"$sort": {"Grupo": 1, "Discos": 1}}]):
             print(listado)
             print("")
-            
+
     elif opcion_avan == "3":
-        for listado in col.aggregate([{"$group":{"_id":{"Grupo":"$Grupo/Artista"},"Albums": {"$push":"$album"}}},
-                                {"$project":{"Grupo":1, "Albums": 1}},
-                                {"$sort":{"Grupo":1}}]):
+        for listado in col.aggregate([{"$group": {"_id": {"Grupo": "$Grupo/Artista"}, "Albums": {"$push": "$album"}}},
+                                      {"$project": {"Grupo": 1, "Albums": 1}},
+                                      {"$sort": {"Grupo": 1}}]):
             print(listado)
             print("")
-        
-        
+
+
     elif opcion_avan == "4":
-        for listado in col.aggregate([{"$group":{"_id":{"Album":"$album", "Year":"$Año", "Grupo":"$Grupo/Artista"}}},
-                               {"$project":{"Year":1, "Grupo":1, "Album":1}},
-                                {"$sort":{"Year": 1}}]):
+        for listado in col.aggregate(
+                [{"$group": {"_id": {"Album": "$album", "Year": "$Año", "Grupo": "$Grupo/Artista"}}},
+                 {"$project": {"Year": 1, "Grupo": 1, "Album": 1}},
+                 {"$sort": {"Year": 1}}]):
             print(listado)
             print("")
 
     elif opcion_avan == "5":
-        iniciar()            
-            
+        iniciar()
+
     else:
         print("la opcion que has seleccionado no es valida")
         listar()
@@ -266,6 +263,7 @@ def listar():
     if query_repeat.lower() == ("s"):
         listar()
     seleccionar()
+
 
 bienvenido()
 iniciar()
